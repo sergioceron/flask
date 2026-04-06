@@ -295,6 +295,9 @@ def test_dotted_names_from_app(app, client):
 
 
 def test_empty_url_defaults(app, client):
+    with pytest.raises(AssertionError, match=r"Blueprint name 'bp.with.dot' contains a dot"):
+        flask.Blueprint("bp.with.dot", __name__)
+
     bp = flask.Blueprint("bp", __name__)
 
     @bp.route("/", defaults={"page": 1})
@@ -340,7 +343,7 @@ def test_route_decorator_custom_endpoint(app, client):
     assert client.get("/py/bar/foo").data == b"bp.bar_foo"
 
 
-def test_route_decorator_custom_endpoint_with_dots(app, client):
+def test_blueprint_name_with_dots(app, client):
     bp = flask.Blueprint("bp", __name__)
 
     @bp.route("/foo")

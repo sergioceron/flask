@@ -277,6 +277,11 @@ def test_dotted_names(app, client):
     assert client.get("/be").data.strip() == b"/fe"
 
 
+@pytest.mark.parametrize('invalid_name', ['name.with.dot', 'another.invalid.name'])
+def test_invalid_blueprint_names(app, invalid_name):
+    with pytest.raises(ValueError, match='Blueprint names should not contain dots'):
+        flask.Blueprint(invalid_name, __name__)
+
 def test_dotted_names_from_app(app, client):
     test = flask.Blueprint("test", __name__)
 

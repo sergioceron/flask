@@ -254,12 +254,12 @@ def test_templates_list(test_apps):
 
 
 def test_dotted_names(app, client):
-    frontend = flask.Blueprint("myapp.frontend", __name__)
-    backend = flask.Blueprint("myapp.backend", __name__)
+    frontend = flask.Blueprint("myapp_frontend", __name__)
+    backend = flask.Blueprint("myapp_backend", __name__)
 
     @frontend.route("/fe")
     def frontend_index():
-        return flask.url_for("myapp.backend.backend_index")
+        return flask.url_for("myapp_backend.backend_index")
 
     @frontend.route("/fe2")
     def frontend_page2():
@@ -267,7 +267,7 @@ def test_dotted_names(app, client):
 
     @backend.route("/be")
     def backend_index():
-        return flask.url_for("myapp.frontend.frontend_index")
+        return flask.url_for("myapp_frontend.frontend_index")
 
     app.register_blueprint(frontend)
     app.register_blueprint(backend)
@@ -278,17 +278,17 @@ def test_dotted_names(app, client):
 
 
 def test_dotted_names_from_app(app, client):
-    test = flask.Blueprint("test", __name__)
+    test_bp = flask.Blueprint("test_bp", __name__)
 
     @app.route("/")
     def app_index():
-        return flask.url_for("test.index")
+        return flask.url_for("test_bp.index")
 
     @test.route("/test/")
     def index():
         return flask.url_for("app_index")
 
-    app.register_blueprint(test)
+    app.register_blueprint(test_bp)
 
     rv = client.get("/")
     assert rv.data == b"/test/"

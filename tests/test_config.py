@@ -31,6 +31,17 @@ def test_config_from_object():
 
 
 def test_config_from_file():
+
+
+def test_config_from_file_with_binary_mode():
+    app = flask.Flask(__name__)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(current_dir, "static", "config.toml"), 'w') as f:
+        f.write("SECRET_KEY = \"binary_mode\"\nTEST_KEY = \"foo\"\n")
+    import tomllib
+    app.config.from_file(os.path.join(current_dir, "static", "config.toml"), tomllib.load)
+    common_object_test(app)
+    os.remove(os.path.join(current_dir, "static", "config.toml"))
     app = flask.Flask(__name__)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     app.config.from_file(os.path.join(current_dir, "static", "config.json"), json.load)

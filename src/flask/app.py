@@ -22,7 +22,7 @@ from werkzeug.routing import MapAdapter
 from werkzeug.routing import RequestRedirect
 from werkzeug.routing import RoutingException
 from werkzeug.routing import Rule
-from werkzeug.wrappers import Response as BaseResponse
+from werkzeug.utils import redirect as _werkzeug_redirect
 
 from . import cli
 from . import json
@@ -96,6 +96,16 @@ def _make_timedelta(value: t.Optional[timedelta]) -> t.Optional[timedelta]:
 
 
 class Flask(Scaffold):
+    def redirect(self, location: str, code: int = 302) -> BaseResponse:
+        """Redirect to a given URL with the specified code.
+
+        This method can be extended or overridden by subclasses to
+        customize redirection logic.
+
+        :param location: The URL to redirect to.
+        :param code: The HTTP status code for the redirect.
+        """
+        return _werkzeug_redirect(location, code)
     """The flask object implements a WSGI application and acts as the central
     object.  It is passed the name of the module or package of the
     application.  Once it is created it will act as a central registry for

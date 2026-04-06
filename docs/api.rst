@@ -20,6 +20,7 @@ Blueprint Objects
 -----------------
 
 .. autoclass:: Blueprint
+   :param name: Blueprint name, must not be empty and should not contain dots.
    :members:
    :inherited-members:
 

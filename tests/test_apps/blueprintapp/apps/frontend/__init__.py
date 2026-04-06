@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import render_template
 
-frontend = Blueprint("frontend", __name__, template_folder="templates")
+frontend_bp = Blueprint("frontend_bp", __name__, template_folder="templates")
 
 
 @frontend.route("/")

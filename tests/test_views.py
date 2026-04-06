@@ -152,6 +152,66 @@ def test_implicit_head(app, client):
     assert rv.headers["X-Method"] == "HEAD"
 
 
+def test_redirect_default(app, client):
+    @app.route('/old')
+    def old():
+        return flask.redirect(flask.url_for('new'))
+
+    @app.route('/new')
+    def new():
+        return 'New Page'
+
+    rv = client.get('/old')
+    assert rv.status_code == 302
+    assert rv.headers['Location'] == '/new'
+
+
+
+def test_redirect_302(app, client):
+    @app.route('/old')
+    def old_with_302():
+        return flask.redirect(flask.url_for('new'), code=302)
+
+    @app.route('/new')
+    def new_with_302():
+        return 'New Page'
+
+    rv = client.get('/old')
+    assert rv.status_code == 302
+    assert rv.headers['Location'] == '/new'
+
+
+
+def test_redirect_301(app, client):
+    @app.route('/old')
+    def old_with_301():
+        return flask.redirect(flask.url_for('new'), code=301)
+
+    @app.route('/new')
+    def new_with_301():
+        return 'New Page'
+
+    rv = client.get('/old', follow_redirects=True)
+    assert rv.status_code == 200
+    assert b'New Page' in rv.data
+
+
+
+def test_redirect_307(app, client):
+    @app.route('/old')
+    def old_with_307():
+        return flask.redirect(flask.url_for('new'), code=307)
+
+    @app.route('/new', methods=['POST'])
+    def new_with_307():
+        return 'New Page'
+
+    rv = client.post('/old')
+    assert rv.status_code == 307
+    assert rv.headers['Location'] == '/new'
+
+
+
 def test_explicit_head(app, client):
     class Index(flask.views.MethodView):
         def get(self):

@@ -411,7 +411,14 @@ from a TOML file:
 .. code-block:: python
 
     import toml
-    app.config.from_file("config.toml", load=toml.load)
+    app.config.from_file("config.toml", load=toml.load, mode="r")
+
+Optionally, you can use the `tomllib` library available from Python 3.11 for reading TOML files:
+
+.. code-block:: python
+
+    import tomllib
+    app.config.from_file("config.toml", load=tomllib.load, mode="rb")
 
 Or from a JSON file:
 

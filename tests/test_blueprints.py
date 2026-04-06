@@ -256,6 +256,10 @@ def test_dotted_name_not_allowed(app, client):
         flask.Blueprint("app.ui", __name__)
 
 
+def test_empty_name_not_allowed(app, client):
+    with pytest.raises(ValueError, match="'name' may not be an empty string."):
+        flask.Blueprint('', __name__)
+
 def test_dotted_names_from_app(app, client):
     test = flask.Blueprint("test", __name__)
 

@@ -191,7 +191,7 @@ class Blueprint(Scaffold):
         )
 
         if "." in name:
-            raise ValueError("'name' may not contain a dot '.' character.")
+            raise ValueError("'name' must not be empty and may not contain a dot '.' character.")
 
         self.name = name
         self.url_prefix = url_prefix

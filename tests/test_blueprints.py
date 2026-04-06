@@ -251,12 +251,20 @@ def test_templates_list(test_apps):
     assert templates == ["admin/index.html", "frontend/index.html"]
 
 
+def test_empty_name_not_allowed(app, client):
+    with pytest.raises(ValueError):
+        flask.Blueprint("", __name__)
+
 def test_dotted_name_not_allowed(app, client):
     with pytest.raises(ValueError):
         flask.Blueprint("app.ui", __name__)
 
 
-def test_dotted_names_from_app(app, client):
+def test_non_empty_name_allowed(app, client):
+    blueprint = flask.Blueprint("non_empty", __name__)
+    assert blueprint.name == "non_empty"
+
+
     test = flask.Blueprint("test", __name__)
 
     @app.route("/")

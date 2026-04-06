@@ -9,7 +9,7 @@ from functools import lru_cache
 from functools import update_wrapper
 from threading import RLock
 
-import werkzeug.utils
+from werkzeug.utils import redirect as _werkzeug_redirect
 from werkzeug.routing import BuildError
 from werkzeug.urls import url_quote
 

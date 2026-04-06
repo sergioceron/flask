@@ -23,6 +23,10 @@ def test_config_from_pyfile():
     app.config.from_pyfile(f"{__file__.rsplit('.', 1)[0]}.py")
     common_object_test(app)
 
+    with open(os.path.join(current_dir, 'static', 'config.json'), 'w') as f:
+        f.write('{"TEST_KEY": "foo", "SECRET_KEY": "config"}')
+    assert app.config.from_file(os.path.join(current_dir, 'static', 'config.json'), json.load, mode='r')
+
 
 def test_config_from_object():
     app = flask.Flask(__name__)
